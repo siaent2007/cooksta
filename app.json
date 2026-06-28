@@ -1,11 +1,14 @@
 {
   "expo": {
-    "name": "cooksta-app",
+    "name": "Cooksta",
     "slug": "cooksta-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
+    "plugins": [
+      ["expo-notifications", { "icon": "./assets/icon.png", "color": "#f5a623" }]
+    ],
     "ios": {
       "supportsTablet": true
     },
