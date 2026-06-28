@@ -13,8 +13,14 @@ export async function saveData(key, value) {
 }
 
 export async function loadData(key) {
-  const raw = await AsyncStorage.getItem(key);
-  return raw ? JSON.parse(raw) : null;
+  try {
+    const raw = await AsyncStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch (err) {
+    // Corrupted JSON or storage read failure — treat as no value instead of throwing.
+    console.warn(`Failed to load "${key}" from storage:`, err);
+    return null;
+  }
 }
 
 export async function removeData(key) {

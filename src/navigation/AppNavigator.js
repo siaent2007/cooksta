@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -68,6 +68,18 @@ function AuthStack() {
   );
 }
 
+function BackButton({ color, onPress }) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      style={{ paddingRight: 16, paddingVertical: 4 }}
+    >
+      <Text style={{ color, fontSize: 28, fontWeight: '600', lineHeight: 28 }}>‹</Text>
+    </TouchableOpacity>
+  );
+}
+
 function AppStack() {
   const { theme: t } = useTheme();
   return (
@@ -80,8 +92,22 @@ function AppStack() {
       }}
     >
       <Stack.Screen name="Main"         component={MainTabs}          options={{ headerShown: false }} />
-      <Stack.Screen name="RecipeList"   component={RecipeListScreen}   options={{ title: 'Recipes' }} />
-      <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen} options={{ title: '' }} />
+      <Stack.Screen
+        name="RecipeList"
+        component={RecipeListScreen}
+        options={({ navigation }) => ({
+          title: 'Recipes',
+          headerLeft: () => <BackButton color={t.text} onPress={() => navigation.goBack()} />,
+        })}
+      />
+      <Stack.Screen
+        name="RecipeDetail"
+        component={RecipeDetailScreen}
+        options={({ navigation }) => ({
+          title: '',
+          headerLeft: () => <BackButton color={t.text} onPress={() => navigation.goBack()} />,
+        })}
+      />
     </Stack.Navigator>
   );
 }

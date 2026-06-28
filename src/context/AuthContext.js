@@ -8,10 +8,19 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadData(KEYS.USER).then((saved) => {
-      if (saved) setUser(saved);
-      setLoading(false);
-    });
+    let mounted = true;
+    (async () => {
+      try {
+        const saved = await loadData(KEYS.USER);
+        if (mounted && saved) setUser(saved);
+      } catch (err) {
+        // Corrupted/unavailable storage shouldn't crash startup — log and continue.
+        console.warn('Failed to load saved user:', err);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => { mounted = false; };
   }, []);
 
   const register = async (name, email, password) => {
@@ -29,14 +38,22 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    await removeData(KEYS.USER);
+    try {
+      await removeData(KEYS.USER);
+    } catch (err) {
+      console.warn('Failed to clear stored user:', err);
+    }
     setUser(null);
   };
 
   const updateName = async (name) => {
     const updated = { ...user, name };
-    await saveData(KEYS.USER, updated);
     setUser(updated);
+    try {
+      await saveData(KEYS.USER, updated);
+    } catch (err) {
+      console.warn('Failed to persist updated name:', err);
+    }
   };
 
   return (
