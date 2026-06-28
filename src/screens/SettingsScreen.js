@@ -69,11 +69,20 @@ export default function SettingsScreen({ navigation }) {
     setEditingName(false);
   };
 
-  const handleSignOut = () =>
+  const handleSignOut = () => {
+    // Alert.alert button callbacks don't fire on react-native-web, so use
+    // the browser confirm there and the native Alert on devices.
+    if (Platform.OS === 'web') {
+      if (typeof window !== 'undefined' && window.confirm('Are you sure you want to sign out?')) {
+        logout();
+      }
+      return;
+    }
     Alert.alert('Sign out', 'Are you sure you want to sign out?', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Sign out', style: 'destructive', onPress: logout },
     ]);
+  };
 
   const Row = ({ icon, label, onPress, right, danger }) => (
     <TouchableOpacity

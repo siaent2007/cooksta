@@ -4,6 +4,7 @@ import {
   ScrollView, Modal, FlatList, ActivityIndicator, Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { findRecipes, getRandomMeal } from '../services/mealApi';
@@ -60,6 +61,12 @@ export default function HomeScreen({ navigation }) {
     <SafeAreaView style={s.safe} edges={['top']}>
       <ScrollView contentContainerStyle={s.container} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
 
+        {/* Brand header */}
+        <View style={s.brandBar}>
+          <Text style={s.brand}>Cooksta</Text>
+          <Text style={s.brandIcon}>🍽️</Text>
+        </View>
+
         {/* Greeting */}
         <View style={s.header}>
           <Text style={s.greetingLine}>{greeting},</Text>
@@ -75,13 +82,17 @@ export default function HomeScreen({ navigation }) {
             onPress={() => navigation.navigate('RecipeDetail', { mealId: featured.idMeal })}
           >
             <Image source={{ uri: featured.strMealThumb }} style={s.featuredImg} />
-            <View style={s.featuredOverlay}>
+            <LinearGradient
+              colors={['transparent', 'rgba(0,0,0,0.15)', 'rgba(0,0,0,0.85)']}
+              locations={[0, 0.55, 1]}
+              style={s.featuredOverlay}
+            >
               <Text style={s.featuredBadge}>Daily Inspiration ✨</Text>
               <Text style={s.featuredTitle} numberOfLines={2}>{featured.strMeal}</Text>
               {featured.strArea ? (
                 <View style={s.areaPill}><Text style={s.areaPillText}>{featured.strArea}</Text></View>
               ) : null}
-            </View>
+            </LinearGradient>
           </TouchableOpacity>
         ) : null}
 
@@ -208,6 +219,9 @@ export default function HomeScreen({ navigation }) {
 const styles = (t) => StyleSheet.create({
   safe:           { flex: 1, backgroundColor: t.bg },
   container:      { padding: 20, paddingBottom: 40 },
+  brandBar:       { flexDirection: 'row', alignItems: 'center', marginBottom: 18 },
+  brand:          { fontSize: 24, fontWeight: '800', color: t.accent, letterSpacing: 0.5 },
+  brandIcon:      { fontSize: 20, marginLeft: 6 },
   header:         { marginBottom: 22 },
   greetingLine:   { fontSize: 14, color: t.textSub },
   greetingName:   { fontSize: 26, fontWeight: '800', color: t.text, marginTop: 2 },
@@ -216,7 +230,8 @@ const styles = (t) => StyleSheet.create({
   featuredImg:    { width: '100%', height: '100%', resizeMode: 'cover' },
   featuredOverlay: {
     position: 'absolute', bottom: 0, left: 0, right: 0,
-    padding: 14, backgroundColor: 'rgba(0,0,0,0.55)',
+    paddingHorizontal: 14, paddingTop: 40, paddingBottom: 14,
+    justifyContent: 'flex-end',
   },
   featuredBadge:  { fontSize: 11, color: t.accent, fontWeight: '700', marginBottom: 4 },
   featuredTitle:  { fontSize: 18, fontWeight: '700', color: '#fff' },

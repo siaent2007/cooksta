@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { saveData, loadData, KEYS } from '../utils/storage';
+import { saveData, loadData, removeData, KEYS } from '../utils/storage';
 
 const AuthContext = createContext({});
 
@@ -28,7 +28,10 @@ export function AuthProvider({ children }) {
     setUser(saved);
   };
 
-  const logout = async () => setUser(null);
+  const logout = async () => {
+    await removeData(KEYS.USER);
+    setUser(null);
+  };
 
   const updateName = async (name) => {
     const updated = { ...user, name };

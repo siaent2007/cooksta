@@ -65,6 +65,7 @@ export default function RegisterScreen({ navigation }) {
       <ScrollView contentContainerStyle={s.container} keyboardShouldPersistTaps="handled">
 
         <View style={s.header}>
+          <Text style={s.brand}>Cooksta</Text>
           <Text style={s.title}>Create account</Text>
           <Text style={s.sub}>Join Cooksta and start discovering recipes</Text>
         </View>
@@ -100,7 +101,8 @@ const styles = (t) => StyleSheet.create({
   flex:       { flex: 1, backgroundColor: t.bg },
   container:  { flexGrow: 1, justifyContent: 'center', padding: 24 },
   header:     { alignItems: 'center', marginBottom: 32 },
-  title:      { fontSize: 32, fontWeight: '800', color: t.accent },
+  brand:      { fontSize: 40, fontWeight: '800', color: t.accent, letterSpacing: 1, marginBottom: 10 },
+  title:      { fontSize: 32, fontWeight: '800', color: t.text },
   sub:        { fontSize: 14, color: t.textSub, marginTop: 6 },
   card:       { backgroundColor: t.card, borderRadius: 18, padding: 24 },
   alert:      { backgroundColor: '#3d0a0a', borderRadius: 10, padding: 12, marginBottom: 16 },
